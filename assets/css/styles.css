@@ -95,8 +95,8 @@ a.btn-primary.hover {
 }
 .btn-green,
 a.btn-green {
-  background: #75c181;
-  border: 1px solid #75c181;
+  background: #E3000F;
+  border: 1px solid #E3000F;
   color: #fff !important;
 }
 .btn-green:hover,
@@ -331,7 +331,7 @@ select {
   color: #40babd;
 }
 .body-green .branding .text-highlight {
-  color: #75c181;
+  color: #E3000F;
 }
 .body-blue .branding .text-highlight {
   color: #58bbee;
@@ -357,7 +357,7 @@ select {
   color: #40babd;
 }
 .body-green .branding .icon {
-  color: #75c181;
+  color: #E3000F;
 }
 .body-blue .branding .icon {
   color: #58bbee;
@@ -423,7 +423,7 @@ select {
   font-size: 36px;
 }
 .body-green .doc-header .doc-title {
-  color: #75c181;
+  color: #E3000F;
 }
 .body-blue .doc-header .doc-title {
   color: #58bbee;
@@ -575,7 +575,7 @@ select {
   color: #fff;
 }
 .callout-success {
-  background: #75c181;
+  background: #E3000F;
   color: #fff;
 }
 .callout-warning {
@@ -731,13 +731,13 @@ select {
 }
 /* Color Schemes */
 .body-green .header {
-  border-color: #75c181;
+  border-color: #E3000F;
 }
 .body-green a {
-  color: #75c181;
+  color: #E3000F;
 }
 .body-green a:hover {
-  color: #52b161;
+  color: #E3000F;
 }
 .body-blue .header {
   border-color: #58bbee;
@@ -809,7 +809,7 @@ select {
 }
 .body-green .doc-menu > li > a:hover,
 .body-green .doc-menu > li > a:focus {
-  color: #75c181;
+  color: #E3000F;
 }
 .body-blue .doc-menu > li > a:hover,
 .body-blue .doc-menu > li > a:focus {
@@ -838,8 +838,8 @@ select {
   font-weight: 600;
 }
 .body-green .doc-menu > li.active > a {
-  color: #75c181;
-  border-color: #75c181;
+  color: #E3000F;
+  border-color: #E3000F;
 }
 .body-blue .doc-menu > li.active > a {
   color: #58bbee;
@@ -885,7 +885,7 @@ select {
   background: none;
 }
 .body-green .doc-sub-menu > li > a:hover {
-  color: #75c181;
+  color: #E3000F;
 }
 .body-blue .doc-sub-menu > li > a:hover {
   color: #58bbee;
@@ -910,7 +910,7 @@ select {
   color: #40babd;
 }
 .body-green .doc-sub-menu > li.active > a {
-  color: #75c181;
+  color: #E3000F;
 }
 .body-blue .doc-sub-menu > li.active > a {
   color: #58bbee;
@@ -1203,13 +1203,13 @@ select {
   color: #40babd;
 }
 .cards-section .item-green .item-inner {
-  border-top: 3px solid #75c181;
+  border-top: 3px solid #E3000F;
 }
 .cards-section .item-green .item-inner:hover .title {
   color: #48a156;
 }
 .cards-section .item-green .icon {
-  color: #75c181;
+  color: #E3000F;
 }
 .cards-section .item-blue .item-inner {
   border-top: 3px solid #58bbee;
