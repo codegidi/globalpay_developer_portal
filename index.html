@@ -4,7 +4,6 @@
 <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->  
 <head>
     <title>Developer Documentation for Zenith's Globalpay </title>
-    <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,16 +11,11 @@
     <meta name="author" content="">    
     <link rel="shortcut icon" href="favicon.ico">  
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-    <!-- Global CSS -->
-    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">   
-    <!-- Plugins CSS -->    
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/plugins/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="assets/plugins/prism/prism.css">
     <link rel="stylesheet" href="assets/plugins/elegant_font/css/style.css">
-    
-    <!-- Theme CSS -->
     <link id="theme-style" rel="stylesheet" href="assets/css/styles.css">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -103,11 +97,11 @@
                                     </p>
                                     <div class="code-block">
                                         <h6>Sample Response Parameters</h6>
-                                        <p><code>{
-                                                    "access_token": "eyJhbGciOiJSUzI1NiIsIm../ /..qTF3Ak51IlaG5Xrw",
-                                                    "expires_in": 900,
-                                                    "token_type": "Bearer"
-                                                }</code></p>
+                                        <pre><code class="language-javascript">{
+    "access_token": "eyJhbGciOiJSUzI1NiIsIm../ /..qTF3Ak51IlaG5Xrw",
+    "expires_in": 900,
+    "token_type": "Bearer"
+}</code></pre>
                                     </div><!--//code-block-->
                                 </div><!--//section-block-->
                                 <div id="step2"  class="section-block">
@@ -124,8 +118,7 @@
 
                                     <br/>
                                     <h6>Sample Request</h6>
-                                    <p><code>
-                                        {
+                                    <pre><code class="language-javascript">{
   "merchantid":"1",
   "returnurl": "http://yourredirect.url",
   "customerip": "127.0.0.1",
@@ -149,12 +142,9 @@
     "quantity": "1"
     }
   ]
-}
-
-                                    </code></p>
+}</code></pre>
                                     <h6>Sample Response</h6>
-                                    <p><code>
-                                        {
+                                    <pre><code class="language-javascript">{
     "status": {
         "statusCode": 201,
         "errorDescription": null
@@ -162,9 +152,7 @@
     "redirectUri": "http://globalpay.azurewebsites.net/api/v3/Payment/Charge?transactionReference=48669....9073",
     "transactionReference": "48669....9073",
     "merchantReference": "1221321242"
-}
-
-                                    </code></p>
+}</code></pre>
                                 </div><!--//section-block-->
                                 <div id="step3"  class="section-block">
                                     <h3 class="block-title">Payment Gateway</h3>
@@ -182,9 +170,11 @@ Validate the result by using the Retrieve transaction call
                                     <h6>Retrive Transaction URL</h6>
                                     <p><code>http://globalpay.azurewebsites.net/api/v3/Payment/Retrieve</code></p>
                                     <h6>Sample parameters</h6>
-                                    <p><code>{"Merchantid":"1",
-                                    "merchantreference":"296...238",
-                                "transactionreference":"4780196..5103"}</code></p>
+                                    <pre><code class="language-javascript">{
+    "Merchantid":"1",
+    "merchantreference":"296...238",
+    "transactionreference":"4780196..5103"
+}</code></pre>
                                     
                                 </div><!--//section-block-->
                             </section><!--//doc-section-->
@@ -199,28 +189,318 @@ Validate the result by using the Retrieve transaction call
                                 </div><!--//section-block-->
 
                                 <div id="php" class="section-block">
-                                    <h6>PHP</h6>
-                                    <a href="https://github.com/codegidi/globalpay_php_script" target="_blank">See Documentation</a>
+                                    <h3>PHP</h3>
+
+                                    <h6>Installing</h6>
+                                    <code>Clone "github.com/codegidi/globalpay_php_script"</code><br/><br/>
+
+                                    <h6>Usage</h6>
+
+                                    <p>The steps for carrying out a transaction is as follows:</p>
+                                    <ul>
+                                        <li>Get an access token by calling the Client Authorisation method</li>
+                                        <li>Use the access_token to send initiate your transaction by calling the Transaction initiaion method</li>
+                                        <li>Redirect to GlobalPay transaction interface using the redirectUri retured in the Transaction initiation call</li>
+                                        <li>After transaction has been done, you will be redirected to the provided redirectUrl provided with the transactionReference as a querystring</li>
+                                        <li>Validate the result by using the Retrieve transaction call</li>
+                                    </ul>
+                                    <br/>
+
+                                    <p><b><u>Client Authentication</u></b></p>
+                                    <pre><code class="language-php">include "globalpay/Authentication.php";
+
+$clientAuth = new GlobalPay_Authentication({optional BOOL isLive : #true for for live enviroment and false for staging default value false});
+$clientAuthResponse = $clientAuth->Client({client id},{client secret});
+
+if(!isset($clientAuthResponse['error'])){
+    $access_token = $clientAuthResponse['access_token'];
+        } else {
+    echo $clientAuthResponse['error'];
+}</code></pre><br/>
+
+
+                                    <p><b><u>Transaction Initialization</u></b></p>
+                                    <pre><code class="language-php">include "globalpay/Transaction.php";
+
+$transactionInit = new GlobalPay_Transaction({Access_token},{optional BOOL isLive : #true for for live enviroment and false for staging default value false});
+$transactionResponse = $transactionInit->initiation({return url},{merchant reference},{merchant id},{description},{total amount in minor},{currency code i.e NGN for naira},{customer email},{customer number},{customer firstname},{customer lastname});
+
+if(!isset($transactionResponse['error'])){
+    header("location:" . $transactionResponse['redirectUri ']);
+        } else {
+    echo $transactionResponse['error'];
+}</code></pre><br/>
+
+                                    <p><b><u>Transaction Verification</u></b></p>
+                                    <pre><code class="language-php">include "globalpay/Transaction.php";
+
+$transaction = new GlobalPay_Transaction({Access_token},{optional BOOL isLive : #true for for live enviroment and false for staging default value false});
+$transactionResponse = $transactionInit->verification({merchant id}, {merchant reference}, {transaction reference});
+
+if(!isset($transactionResponse['error'])){
+    print_r($transactionResponse);
+        } else {
+    echo $transactionResponse['error'];
+}</code></pre><br/>
+
                                 </div>
                                 <div id="composer" class="section-block">
-                                    <h6>PHP COMPOSER</h6>
-                                    <a href="https://github.com/codegidi/globalpay_php" target="_blank">See Documentation</a>
+                                    <h3>PHP COMPOSER</h3>
+                                    <h6>Installing</h6>
+                                    <code>composer require codegidi/globalpay</code><br/><br/>
+
+                                    <h6>Usage</h6>
+
+                                    <p>The steps for carrying out a transaction is as follows:</p>
+                                    <ul>
+                                        <li>Get an access token by calling the Client Authorisation method</li>
+                                        <li>Use the access_token to send initiate your transaction by calling the Transaction initiaion method</li>
+                                        <li>Redirect to GlobalPay transaction interface using the redirectUri retured in the Transaction initiation call</li>
+                                        <li>After transaction has been done, you will be redirected to the provided redirectUrl provided with the transactionReference as a querystring</li>
+                                        <li>Validate the result by using the Retrieve transaction call</li>
+                                    </ul>
+                                    <br/>
+
+                                    <p><b><u>Client Authentication</u></b></p>
+                                    <pre><code class="language-php">require_once __DIR__ . '/../vendor/autoload.php';
+use GlobalPay\Authentication;
+
+$clientAuth = new GlobalPay_Authentication({optional BOOL isLive : #true for for live enviroment and false for staging default value false});
+$clientAuthResponse = $clientAuth->Client({client id},{client secret});
+
+if(!isset($clientAuthResponse['error'])){
+    $access_token = $clientAuthResponse['access_token'];
+        } else {
+    echo $clientAuthResponse['error'];
+}</code></pre><br/>
+
+
+                                    <p><b><u>Transaction Initialization</u></b></p>
+                                    <pre><code class="language-php">require_once __DIR__ . '/../vendor/autoload.php';
+use GlobalPay\Transaction;
+
+$transactionInit = new GlobalPay_Transaction({Access_token},{optional BOOL isLive : #true for for live enviroment and false for staging default value false});
+$transactionResponse = $transactionInit->initiation({return url},{merchant reference},{merchant id},{description},{total amount in minor},{currency code i.e NGN for naira},{customer email},{customer number},{customer firstname},{customer lastname});
+
+if(!isset($transactionResponse['error'])){
+    header("location:" . $transactionResponse['redirectUri ']);
+        } else {
+    echo $transactionResponse['error'];
+}</code></pre><br/>
+
+                                    <p><b><u>Transaction Verification</u></b></p>
+                                    <pre><code class="language-php">require_once __DIR__ . '/../vendor/autoload.php';
+use GlobalPay\Transaction;
+
+$transaction = new GlobalPay_Transaction({Access_token},{optional BOOL isLive : #true for for live enviroment and false for staging default value false});
+$transactionResponse = $transactionInit->verification({merchant id}, {merchant reference}, {transaction reference});
+
+if(!isset($transactionResponse['error'])){
+    print_r($transactionResponse);
+        } else {
+    echo $transactionResponse['error'];
+}</code></pre><br/>
                                 </div>
                                 <div id="ruby" class="section-block">
-                                    <h6>ROR</h6>
-                                    <a href="https://github.com/codegidi/globalpay_ruby_gem" target="_blank">See Documentation</a>
+                                    <h3>ROR</h3>
+                                    <h6>Installing</h6>
+                                    <p>Add this line to your application's Gemfile:</p>
+                                    <code>gem 'globalpay_ruby_gem'</code><br/>
+                                    <p>And then execute</p>
+                                    <code>$ bundle</code><br/>
+                                    <br/>
+                                    <p>Or install it yourself as:</p>
+                                    <code>$ gem install globalpay_ruby_gem</code><br/><br/>
+
+
+                                    <h6>Usage</h6>
+
+                                    <p>The steps for carrying out a transaction is as follows:</p>
+                                    <ul>
+                                        <li>Get an access token by calling the Client Authorisation method</li>
+                                        <li>Use the access_token to send initiate your transaction by calling the Transaction initiaion method</li>
+                                        <li>Redirect to GlobalPay transaction interface using the redirectUri retured in the Transaction initiation call</li>
+                                        <li>After transaction has been done, you will be redirected to the provided redirectUrl provided with the transactionReference as a querystring</li>
+                                        <li>Validate the result by using the Retrieve transaction call</li>
+                                    </ul>
+                                    <br/>
+
+                                    <p><b><u>Client Authentication</u></b></p>
+                                    <pre><code class="language-ruby">globalpay_ruby_gem.authenticate(client_id,client_secret,is_live{Bool isLive : #True for for live enviroment and false for staging default value false});</code></pre><br/>
+
+
+                                    <p><b><u>Transaction Initialization</u></b></p>
+                                    <pre><code class="language-ruby">globalpay_ruby_gem.initialize_transaction(access_token,returnurl,merchantreference,merchantid,description,currencycode{eg NGN for naira},totalamount,customeremail,customernumber,customerfirstname,customerlastname,is_live{Bool isLive : #True for for live enviroment and false for staging default value false});
+</code></pre><br/>
+
+                                    <p><b><u>Transaction Verification</u></b></p>
+                                    <pre><code class="language-php">globalpay_ruby_gem.retrieve(access_token,merchantid,merchantreference,transactionrequest,is_live{Bool isLive : #True for for live enviroment and false for staging default value false})</code></pre><br/>
                                 </div>
                                 <div id="csharp" class="section-block">
-                                    <h6>C#</h6>
-                                    <a href="https://github.com/codegidi/globalpay_csharp_nuget" target="_blank">See Documentation</a>
+                                    <h3>C#</h3>
+
+                                    <h6>Prerequisites</h6>
+                                    <p>This Library require .Net framework 4.6 or higher</p>
+
+
+                                    <h6>Installing</h6>
+                                    <p> Install this library from <a href="https://www.nuget.org/packages/Globalpay.Net.SDK">Nuget</a>
+                                        Or Click on NuGet manager in Visual Studios and search for GlobalPay.Net.SDK</p>
+
+                                    <h6>Usage</h6>
+
+                                    <p>The steps for carrying out a transaction is as follows:</p>
+                                    <ul>
+                                        <li>Get an access token by calling the Client Authorisation method</li>
+                                        <li>Use the access_token to send initiate your transaction by calling the Transaction initiaion method</li>
+                                        <li>Redirect to GlobalPay transaction interface using the redirectUri retured in the Transaction initiation call</li>
+                                        <li>After transaction has been done, you will be redirected to the provided redirectUrl provided with the transactionReference as a querystring</li>
+                                        <li>Validate the result by using the Retrieve transaction call</li>
+                                    </ul>
+                                    <br/>
+
+                                    <p><b><u>Client Authentication</u></b></p>
+                                    <pre><code class="language-javascript">using GlobalPay.Net;
+var globalPayAuthentication = new GlobalPayAuthentication();
+var response = await globalPayAuthentication.AuthenticateClient(string _clientId, string _clientSecret, {optional BOOL isLive : #true for for live enviroment and false for staging default value false})
+
+var access_token = response.Access_token;</code></pre><br/>
+
+
+                                    <p><b><u>Transaction Initialization</u></b></p>
+                                    <pre><code class="language-javascript">using GlobalPay.Net;
+var globalPayTransactions = new GlobalPayTransactions(ACCESS_TOKEN);
+var response = await globalPayTransactions.InitializeTransaction(string _returnurl, string _merchantreference, string _merchantid , string _description, string _totalamount, string _currencycode {currency code i.e NGN for naira}, string _customerEmail, string _customerNumber, string _customerFirstName, string _customerLastName, {optional BOOL isLive : #true for for live enviroment and false for staging default value false})
+
+if(response.status.statusCode){
+    Response.AddHeader("Access-Control-Allow-Origin", "*");
+    Response.AppendHeader("Access-Control-Allow-Origin", "*");
+	Response.Redirect(response.redirectUri);
+}else{
+//Handle Error
+}</code></pre><br/>
+
+                                    <p><b><u>Transaction Verification</u></b></p>
+                                    <pre><code class="language-php">using GlobalPay.Net;
+var globalPayTransactions = new GlobalPayTransactions(ACCESS_TOKEN);
+var response = await globalPayTransactions.RetrieveTransaction(string _merchantId, string _merchantReference, string _transactionReference, {optional BOOL isLive : #true for for live enviroment and false for staging default value false})</code></pre><br/>
                                 </div>
+
                                 <div id="java" class="section-block">
-                                    <h6>JAVA</h6>
-                                    <a href="https://github.com/codegidi/globalpay_java" target="_blank">See Documentation</a>
+                                    <h3>JAVA</h3>
+                                    <h6>Installing</h6>
+                                    <ul>
+                                        <li><code>Clone "https://github.com/codegidi/globalpay_java"</code></li>
+                                        <li>Add jar file as a Module to your Java project:</li>
+                                        <li>On Intellij IDEA: File -> Project Structure -> Modules -> Dependencies Tab -> Add -> JARs or Directories -> Attach jar</li>
+                                        <li>On Netbeans: Project properties -> Libraries -> Compile -> ADD JAR/folder -> Add Jar</li>
+                                    </ul>
+
+                                    <h6>Usage</h6>
+
+                                    <p>The steps for carrying out a transaction is as follows:</p>
+                                    <ul>
+                                        <li>Get an access token by calling the Client Authorisation method</li>
+                                        <li>Use the access_token to send initiate your transaction by calling the Transaction initiaion method</li>
+                                        <li>Redirect to GlobalPay transaction interface using the redirectUri retured in the Transaction initiation call</li>
+                                        <li>After transaction has been done, you will be redirected to the provided redirectUrl provided with the transactionReference as a querystring</li>
+                                        <li>Validate the result by using the Retrieve transaction call</li>
+                                    </ul>
+                                    <br/>
+
+                                    <p><b><u>Client Authentication</u></b></p>
+                                    <pre><code class="language-javascript">import ng.com.mdt.globalpay.GlobalpayAuthentication;
+import ng.com.mdt.globalpay.models.ClientAuthenticationResponse;
+
+GlobalpayAuthentication globalpayAuthentication = new GlobalpayAuthentication();
+ClientAuthenticationResponse client =  globalpayAuthentication.AuthenticateClient({String Client Id}, {String Client secret});
+
+System.out.println(client.getAccess_token());</code></pre><br/>
+
+
+                                    <p><b><u>Transaction Initialization</u></b></p>
+                                    <pre><code class="language-javascript">import ng.com.mdt.globalpay.GlobalpayTransaction;
+import ng.com.mdt.globalpay.models.TransactionRegistrationResponse;
+
+GlobalpayTransaction globalpayTransaction = new GlobalpayTransaction(client.getAccess_token());
+TransactionRegistrationResponse transactionResponse =  globalpayTransaction.InitializeTransaction(string _returnurl, string _merchantreference, string _merchantid , string _description, string _totalamount, string _currencycode {currency code i.e NGN for naira}, string _customerEmail, string _customerNumber, string _customerFirstName, string _customerLastName, {optional BOOL isLive : #true for for live enviroment and false for staging default value false});
+
+System.out.println(transactionResponse.getRedirectUri());</code></pre><br/>
+
+                                    <p><b><u>Transaction Verification</u></b></p>
+                                    <pre><code class="language-php">import ng.com.mdt.globalpay.GlobalpayTransaction;
+import ng.com.mdt.globalpay.models.RetrieveTransactionResponse;
+
+GlobalpayTransaction globalpayTransaction = new GlobalpayTransaction(client.getAccess_token());
+RetrieveTransactionResponse retrieveTransactionResponse = globalpayTransaction.RetrieveTransaction(string _merchantId, string _merchantReference, string _transactionReference, {optional BOOL isLive : #true for for live enviroment and false for staging default value false})</code></pre><br/>
                                 </div>
+
                                 <div id="go" class="section-block">
-                                    <h6>GO Lang</h6>
-                                    <a href="https://github.com/codegidi/globalpay_go" target="_blank">See Documentation</a>
+                                    <h3>GO Lang</h3>
+                                    <h6>Installing</h6>
+                                    <code class="language-php">import "github.com/codegidi/Globalpay_go"</code>
+
+                                    <h6>Usage</h6>
+
+                                    <p>The steps for carrying out a transaction is as follows:</p>
+                                    <ul>
+                                        <li>Get an access token by calling the Client Authorisation method</li>
+                                        <li>Use the access_token to send initiate your transaction by calling the Transaction initiaion method</li>
+                                        <li>Redirect to GlobalPay transaction interface using the redirectUri retured in the Transaction initiation call</li>
+                                        <li>After transaction has been done, you will be redirected to the provided redirectUrl provided with the transactionReference as a querystring</li>
+                                        <li>Validate the result by using the Retrieve transaction call</li>
+                                    </ul>
+                                    <br/>
+
+                                    <p><b><u>Client Authentication</u></b></p>
+                                    <pre><code class="language-javascript">client := Globalpay.NewClientAuth()
+
+clientRequest := &TransactionRegistrationRequest{
+	GrantType:      "{string}",
+	ClientId: 		"{string}",
+	ClientSecret:   "{string}",
+}
+
+clientAuthenticationResponse, err := client.Transaction.AuthenticateClient(transactionRequest)</code></pre><br/>
+
+
+                                    <p><b><u>Transaction Initialization</u></b></p>
+                                    <pre><code class="language-javascript">accessToken := {ACCESS TOKEN}
+client := Globalpay.NewClient(accessToken)
+
+product := map[string][]map[string]string{
+        "Products":   {{"Name": "{string}", "UnitPrice" : "{string}", "Quantity" : "{string}"}, {"Name": "{string}", "UnitPrice" : "{string}", "Quantity" : "{string}"}},
+}
+
+transactionRequest := &TransactionRegistrationRequest{
+	Name : 				"{string}",
+	ReturnUrl : 		"{string}",
+	CustomerIp : 		"{string}",
+	MerchantReference : "{string}",
+	MerchantId : 		"{string}",
+	Description : 		"{string}",
+	CurrencyCode : 		"{string eg NGN for naira}",
+	TotalAmount : 		"{string}",
+	PaymentMethod : 	"{string}",
+	TransactionType : 	"{string}",
+	ConnectionMode : 	"{string}",
+	Customer : map[string]interface{}{"Email":"{string}","Mobile":"{string}","Firstname":"{string}","Lastname":"{string}"},
+	Product : product
+}
+
+transactionInitiationResponse, err := client.Transaction.Initialize(transactionRequest)</code></pre><br/>
+
+                                    <p><b><u>Transaction Verification</u></b></p>
+                                    <pre><code class="language-javascript">accessToken := {ACCESS TOKEN}
+client := Globalpay.NewClient(accessToken)
+
+transactionToVerify := &RetrieveTransactionRequest{
+	MerchantId : 				"{string}",
+	MerchantReference : 		"{string}",
+	TransactionReference : 		"{string}",
+}
+
+transactionVerificationResponse, err := client.Transaction.Verify(transactionToVerify)</code></pre><br/>
                                 </div>
 
                                 
@@ -233,27 +513,30 @@ Validate the result by using the Retrieve transaction call
                                 </div>
 
                                 <div id="opencart" class="section-block">
-                                    <h6>OPENCART 2.3.X</h6>
-                                    <a href="" target="_blank">Download</a>
-                                    <h6>OPENCART 3.X</h6>
-                                    <a href="" target="_blank">Download</a>
+                                    <h6>OPENCART</h6>
+                                    <a href="assets/download/globalpay-opencart-2.3.x.zip" download="globalpay-opencart-2.3.x.zip">Download version 2.3.X</a><br/>
+                                    <a href="assets/download/globalpay-opencart-3.x.zip" download="globalpay-opencart-3.x.zip">Download version  3.X</a>
                                 </div>
 
                                 <div id="woocommerce" class="section-block">
                                     <h6>WOOCOMMERCE</h6>
-                                    <a href="" target="_blank">Download</a>
+                                    <a href="assets/download/globalpay-woocommerce.zip" download="globalpay-woocommerce.zip">Download</a>
                                 </div>
 
                                 <div id="prestashop" class="section-block">
                                     <h6>PRESTASHOP</h6>
-                                    <a href="" target="_blank">Download</a>
+                                    <a href="assets/download/globalpay-gateway-for-prestashop-1.7-master.zip" download="globalpay-prestashop-1.7.zip">Download</a>
                                 </div>
 
                                
                             </section><!--//doc-section-->
 
                             <section id="cards-section" class="doc-section">
-                                
+                                <h6>Test Mastercard</h6>
+                                <pre><code>Pan: 5123456789012346
+Expiry Date: May 2017
+123</code></pre>
+
                             </section><!--//doc-section-->
                             
                            
